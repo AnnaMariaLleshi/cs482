@@ -1,4 +1,4 @@
-import java.utils.Arrays;
+import java.util.Arrays;
 
 public class AESChallenge{
     public static byte[] hexToBytes(String hex) {
@@ -43,6 +43,13 @@ public class AESChallenge{
             prev = ci;
         }
         return pt;
+    }
+    public static boolean looksLikeAscii(byte[] pt) {
+        for (byte b : pt) {
+            int v = b & 0xff;
+            if (v < 32 || v > 126) return false;  // printable ASCII
+        }
+        return true;
     }
 
     public static void main(String[] args) {
