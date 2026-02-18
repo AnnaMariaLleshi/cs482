@@ -64,7 +64,7 @@ public class AESChallenge{
             byte[] candidateKey = new byte[16];
             candidateKey[15] = (byte) last;
 
-            byte[] pt = aes128CbcDecrypt(candidateKey, msg);
+            byte[] pt = AESCbcDecrypt(candidateKey, msg);
 
             if (looksLikeAscii(pt)) {                 // your validity check
                 System.out.println("KEY = " + bytesToHex(candidateKey));
