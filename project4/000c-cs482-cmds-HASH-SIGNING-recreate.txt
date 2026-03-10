@@ -1,0 +1,60 @@
+#
+# 0. Demonstrate cryptography HASHING
+#
+# The following computes the SHA512 hash of file myfile.bin
+#
+echo -n "2025 CS482 Cryptography" | sha512sum
+echo -n "2025 CS482 cryptography" | sha512sum
+sha512sum myfile.bin
+
+#
+# The following computes the SHA1 hash of file myfile.bin
+#
+echo -n "2025 CS482 Cryptography" | shasum
+shasum myfile.bin
+
+#
+# 1. Alice runs the following commands to GENERATE a RSA public/private key pair for herself;
+#    (Unfortunately, OpenSSL does not support NTRU yet so we have to use RSA);
+#    store them into files alice_private_key.pem and alice_public_key.pem respectively
+#
+# The generates a 3072-bit RSA private key and saves the encoded key to alice_private_key.pem
+#
+openssl genrsa -out alice_private_key.pem 3072
+#
+# This prints out the content of the RSA private key. If you have never studied RSA, ignore this
+#
+openssl rsa -in alice_private_key.pem -text
+#
+# This saves the encoded public key to alice_public_key.pem. If you have never studied RSA, ignore this
+#
+openssl rsa -in alice_private_key.pem -out alice_public_key.pem -outform PEM -pubout
+#
+# This prints out the content of the RSA public key. If you have never studied RSA, ignore this
+#
+openssl rsa -inform PEM -pubin -in alice_public_key.pem -text
+
+#
+# 2. Alice SIGNs a message in a file (alicecontract.txt) with a private key from (alice_private_key.pem)
+#    store the digital signature in a file alicecontract.txt.sig
+#
+cat alicecontract.txt
+#
+# Alice uses this command to digitally sign alicecontract.txt with her private key. The
+#     resulting digital signature is written to file alicecontract.txt.sig
+#
+openssl dgst -sha256 -sign alice_private_key.pem -out alicecontract.txt.sig alicecontract.txt
+#
+# The following command shows the content of alicecontract.txt.sig, which is byte array and not printable
+#
+hd alicecontract.txt.sig
+cat alicecontract.txt.sig
+#
+# Next, Alice emails alicecontract.txt.sig and alicecontract.txt to Bob
+#
+
+#
+# 3. Bob VERIFIES a received (message [in alicecontract.txt], signature [in alicecontract.txt.sig]) pair
+#    with the signer's public key [in alice_public_key.pem]
+#    The verification result is printed to screen
+#
